@@ -135,7 +135,7 @@ func (r *Reconciler) Reconcile(ctx context.Context, o results.Object) error {
 	// the context channel being closed because of Canceled or DeadlineExceeded
 	logger := logging.FromContext(ctx)
 	defer func() {
-		logger.Infof("GGM dynamic Reconcile kind %s obj ns %s obj name %s time spent %s",
+		logger.Infof("GGM;dynamic Reconcile;kind %s;ns %s;name %s;time spent %s",
 			o.GetObjectKind().GroupVersionKind().Kind, o.GetNamespace(), o.GetName(), time.Now().Sub(startTime).String())
 		if ctx == nil {
 			return
@@ -546,7 +546,7 @@ func (r *Reconciler) streamLogs(ctx context.Context, o results.Object, logType, 
 		return fmt.Errorf("error reading from tkn reader: %w", err)
 	}
 
-	logger.Infof("GGM2 tkn read obj kind %s obj ns %s obj name %s times spent %s",
+	logger.Infof("GGM2;tkn read;kind %s;ns %s;name %s;time spent %s",
 		o.GetObjectKind().GroupVersionKind().Kind, o.GetNamespace(), o.GetName(), time.Now().Sub(startTime).String())
 
 	tknWriteStart := time.Now()
@@ -563,7 +563,7 @@ func (r *Reconciler) streamLogs(ctx context.Context, o results.Object, logType, 
 		return fmt.Errorf("error occurred while calling tkn client write: %w", chanErr)
 	}
 
-	logger.Infof("GGM3 tkn write obj kind %s obj ns %s obj name %s times spent %s",
+	logger.Infof("GGM3;tkn write;kind %s;ns %s;name %s;time spent %s",
 		o.GetObjectKind().GroupVersionKind().Kind, o.GetNamespace(), o.GetName(), time.Now().Sub(tknWriteStart).String())
 
 	logWriteStart := time.Now()
@@ -577,7 +577,7 @@ func (r *Reconciler) streamLogs(ctx context.Context, o results.Object, logType, 
 			zap.String("name", o.GetName()),
 		)
 	}
-	logger.Infof("GGM4 log copy and write obj kind %s obj ns %s obj name %s times spent %s",
+	logger.Infof("GGM4;log copy and write;kind %s;ns %s;name %s;time spent %s",
 		o.GetObjectKind().GroupVersionKind().Kind, o.GetNamespace(), o.GetName(), time.Now().Sub(logWriteStart).String())
 
 	if cntStdout != len(bufStdout) {
@@ -610,7 +610,7 @@ func (r *Reconciler) streamLogs(ctx context.Context, o results.Object, logType, 
 		logger.Error(flushErr)
 		return flushErr
 	}
-	logger.Infof("GGM5 flush obj kind %s obj ns %s obj name %s times spent %s",
+	logger.Infof("GGM5;flush;kind %s;ns %s;name %s;time spent %s",
 		o.GetObjectKind().GroupVersionKind().Kind, o.GetNamespace(), o.GetName(), time.Now().Sub(flushStart).String())
 
 	closeRecvStart := time.Now()
@@ -636,12 +636,12 @@ func (r *Reconciler) streamLogs(ctx context.Context, o results.Object, logType, 
 		logger.Error(closeErr)
 		return closeErr
 	}
-	logger.Infof("GGM6 close/rcv obj kind %s obj ns %s obj name %s times spent %s",
+	logger.Infof("GGM6;close/rcv;kind %s;ns %s;name %s;time spent %s",
 		o.GetObjectKind().GroupVersionKind().Kind, o.GetNamespace(), o.GetName(), time.Now().Sub(closeRecvStart).String())
 
 	endTime := time.Now()
 
-	logger.Infof("GGM streamLogs obj kind %s obj ns %s obj name %s times spent %s",
+	logger.Infof("GGM;streamLogs;kind %s;ns %s;name %s;time spent %s",
 		o.GetObjectKind().GroupVersionKind().Kind, o.GetNamespace(), o.GetName(), endTime.Sub(startTime).String())
 
 	logger.Debugw("Exiting streamLogs",
